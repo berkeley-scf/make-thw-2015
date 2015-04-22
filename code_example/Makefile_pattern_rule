@@ -1,0 +1,39 @@
+DEBUG = True
+CXX = g++
+CXXFLAGS = -O
+LFLAGS = -L /opt/acml/lib
+INCLUDES = -I/opt/acml/include
+LIBS = -lm -lacml
+
+HEADERS = vec1.h
+# use of wildcard forces expansion rather than creating "*.o" as OBJS
+OBJS = $(wildcard *.o)
+
+ifeq ($(DEBUG), True)
+     CXXFLAGS += -g
+endif
+
+$(HEADERS): base.h
+
+algo: $(OBJS)
+	$(CXX) $(OBJS) $(LIBS) -o algo
+
+# implicit rule
+%.o: %.cpp
+     $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $< 
+
+# or this, which uses substitution
+# %.o: %.cpp
+#     $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $(@:.o=.cpp) 
+#
+# or OBJS could be any set of specific .o files
+# $(OBJS): %.o: %.c
+#        $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) $< -o $@
+
+# prevent confusion if there is a file 'clean'
+.PHONY: clean
+
+clean:
+        rm -f $(OBJS) algo
+
+

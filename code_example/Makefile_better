@@ -1,0 +1,31 @@
+DEBUG = True
+CXX = g++
+CXXFLAGS = -O
+LFLAGS = -L /opt/acml/lib
+INCLUDES = -I/opt/acml/include
+LIBS = -lm -lacml
+
+HEADERS = vec1.h
+OBJS = vec1.o vecMain.o
+
+ifeq ($(DEBUG), True)
+     CXXFLAGS += -g
+endif
+
+$(HEADERS): base.h
+
+algo: $(OBJS)
+	$(CXX) $(OBJS) $(LIBS) -o algo
+
+vec1.o: $(HEADERS) vec1.cpp
+	$(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o vec1.o vec1.cpp 
+
+vecMain.o: $(HEADERS) vecMain.cpp
+	$(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o vecMain.o vecMain.cpp
+
+# prevent confusion if there is a file 'clean'
+.PHONY: clean
+
+clean:
+        rm -f $(OBJS) algo
+
