@@ -6,8 +6,9 @@ INCLUDES = -I/opt/acml/include
 LIBS = -lm -lacml
 
 HEADERS = vec1.h
-# use of wildcard forces expansion rather than creating "*.o" as OBJS
-OBJS = $(wildcard *.o)
+# use of wildcard forces expansion rather than creating "*.cpp" as CPPS
+CPPS = $(wildcard *.cpp)
+OBJS = $(CPPS:.cpp=.o)
 
 ifeq ($(DEBUG), True)
      CXXFLAGS += -g
