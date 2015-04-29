@@ -177,7 +177,8 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Using-Make-to-Build-Software-and-Manage-Workflows">Using Make to Build Software and Manage Workflows<a class="anchor-link" href="#Using-Make-to-Build-Software-and-Manage-Workflows">&#182;</a></h1><p>Chris Paciorek</p>
-<p>Statistical Computing Facility, Department of Statistics, UC Berkeley</p>
+<p>Statistical Computing Facility, Department of Statistics and 
+Berkeley Research Computing, UC Berkeley</p>
 
 </div>
 </div>
@@ -1013,7 +1014,7 @@ install: bin lib dir
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can take a look at the various Makefiles. Poking around a bit, it looks like the master Makefile includes Makefile.internal, which has a bunch of variable definitions and pattern recipes. Makefile.internal also includes make.inc, which varies depending on the BLAS used. E.g., make.inc.openblas has compilation-related variables specific to linking in OpenBLAS. The master Makefile invokes Makefiles in subdirectories to compile various components of the codebase.</p>
+<p>Now we can take a look at the various Makefiles. Poking around a bit, it looks like the master <em>Makefile</em> includes <em>Makefile.internal</em>, which has a bunch of variable definitions and pattern recipes. <em>Makefile.internal</em> also includes <em>make.inc</em>, which varies depending on the BLAS used. E.g., <em>make.inc.mkl-icc</em> has compilation-related variables specific to linking the MKL linear algebra library. The master <em>Makefile</em> invokes Makefiles in subdirectories to compile various components of the codebase. These rely on the pattern rules from <em>Makefile.internal</em>.</p>
 
 </div>
 </div>
