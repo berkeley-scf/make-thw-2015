@@ -19,15 +19,15 @@ algo: $(OBJS)
 	$(CXX) $(OBJS) $(LIBS) -o algo
 
 # implicit rule
-%.o: %.cpp
+%.o: %.cpp $(HEADERS)
      $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $< 
 
 # or this, which uses substitution
-# %.o: %.cpp
+# %.o: %.cpp $(HEADERS)
 #     $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $(@:.o=.cpp) 
 #
 # or OBJS could be any set of specific .o files
-# $(OBJS): %.o: %.c
+# $(OBJS): %.o: %.cpp $(HEADERS)
 #        $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) $< -o $@
 
 # prevent confusion if there is a file 'clean'
