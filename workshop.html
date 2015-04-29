@@ -262,13 +262,13 @@ cat code_example/Makefile
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre># default rule is the first one
-algo: vec1.h base.h vec1.o vecMain.o
+algo: vec1.o vecMain.o
 	g++ -o algo vec1.o vecMain.o
 
 vec1.o: vec1.h base.h vec1.cpp
 	g++ -c -o vec1.o vec1.cpp
 
-vecMain.o: vecMain.cpp
+vecMain.o: vec1.h base.h vecMain.cpp
 	g++ -c -o vecMain.o vecMain.cpp
 </pre>
 </div>
