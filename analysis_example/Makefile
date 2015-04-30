@@ -15,6 +15,7 @@ mypaper.pdf: mypaper.bib mypaper.tex tables.tex Figs/fig1.pdf Figs/fig2.pdf
 	pdflatex mypaper
 	pdflatex mypaper
 
+# would be nice to automate checking to see if data on web has changed
 web_data:
 	cd data; wget $(DATA_WEBSERVER)/$(INPUT_DATA)
 

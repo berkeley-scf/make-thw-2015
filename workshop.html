@@ -245,7 +245,7 @@ algo.o: algo.cpp defaults.h
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -323,7 +323,7 @@ vecMain.o: vec1.h base.h vecMain.cpp
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -371,17 +371,6 @@ vecMain.o: $(HEADERS) vecMain.cpp
 clean:
         rm -f $(OBJS) algo
 
-# more general:
-# %.o: %.cpp
-#     $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $&lt; 
-# or this, which uses substitution
-# %.o: %.cpp
-#     $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $(@:.o=.cpp) 
-# OBJS = $(wildcard *.o)  
-# use of wildcard forces expansion rather than creating &quot;*.o&quot; as OBJS
-# or OBJS could be any set of .o files
-# $(OBJS): %.o: %.c
-#        $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) $&lt; -o $@
 </pre>
 </div>
 </div>
@@ -423,7 +412,7 @@ clean:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -448,8 +437,9 @@ INCLUDES = -I/opt/acml/include
 LIBS = -lm -lacml
 
 HEADERS = vec1.h
-# use of wildcard forces expansion rather than creating &quot;*.o&quot; as OBJS
-OBJS = $(wildcard *.o)
+# use of wildcard forces expansion rather than creating &quot;*.cpp&quot; as CPPS
+CPPS = $(wildcard *.cpp)
+OBJS = $(CPPS:.cpp=.o)
 
 ifeq ($(DEBUG), True)
      CXXFLAGS += -g
@@ -461,15 +451,15 @@ algo: $(OBJS)
 	$(CXX) $(OBJS) $(LIBS) -o algo
 
 # implicit rule
-%.o: %.cpp
+%.o: %.cpp $(HEADERS)
      $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $&lt; 
 
 # or this, which uses substitution
-# %.o: %.cpp
+# %.o: %.cpp $(HEADERS)
 #     $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) -o $@ $(@:.o=.cpp) 
 #
 # or OBJS could be any set of specific .o files
-# $(OBJS): %.o: %.c
+# $(OBJS): %.o: %.cpp $(HEADERS)
 #        $(CXX) -c $(CXXFLAGS) $(LFLAGS) $(INCLUDES) $&lt; -o $@
 
 # prevent confusion if there is a file &apos;clean&apos;
@@ -499,9 +489,9 @@ clean:
 <div class="highlight"><pre>CFLAGS +<span class="o">=</span> -O
 </pre></div>
 <ul>
-<li>$@ matches the target</li>
-<li>$&lt; matches the first prerequesite</li>
-<li>$^ matches all prerequisites</li>
+<li><code>$@</code> matches the target</li>
+<li><code>$&lt;</code> matches the first prerequesite</li>
+<li><code>$^</code> matches all prerequisites</li>
 </ul>
 <p>Given the above, what's the problem with this:</p>
 <div class="highlight"><pre><span class="nv">CFLAGS</span> <span class="o">=</span> <span class="k">$(</span>CFLAGS<span class="k">)</span> -O
@@ -514,7 +504,7 @@ clean:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -587,7 +577,7 @@ Test 4: foo4 is see ya
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -658,7 +648,7 @@ clean:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -741,7 +731,7 @@ output file: module0_induction.md
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -795,13 +785,14 @@ test:
   
 #############################
   
-HTMLFILE is workshop.html
-FILES is mod1.html mod2.html default.md example.md
-SORTED is bar duh foo
-INPUTDIRS is /tmp/ /var/tmp/
-SUFFIXES is .c .o
-TRANSFORMED is /tmp/foo.cpp /var/tmp/bar.cpp
-ALLFILES is code_example/demo.sh code_example/Makefile code_example/Makefile~ code_example/Makefile_better code_example/Makefile_better~ code_example/Makefile_explicit_rule~ code_example/Makefile_pattern_rule workshop_example/Makefile workshop_example/Makefile~ workshop_example/modules
+</pre>
+</div>
+</div>
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>make: Makefile_functions: No such file or directory
+make: *** No rule to make target &#96;Makefile_functions&apos;.  Stop.
 </pre>
 </div>
 </div>
@@ -832,7 +823,7 @@ ALLFILES is code_example/demo.sh code_example/Makefile code_example/Makefile~ co
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -850,6 +841,8 @@ cat analysis_example/Makefile
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>INTERIMS = *.aux *.bbl *.blg *.log *.bak *~ *.Rout
+INPUT_DATA = census.dat
+DATA_WEBSERVER = http://www.census.gov/datafiles
 DATA = *.Rda *.csv
 USER = paciorek
 SERVER = foo.berkeley.edu
@@ -864,7 +857,11 @@ mypaper.pdf: mypaper.bib mypaper.tex tables.tex Figs/fig1.pdf Figs/fig2.pdf
 	pdflatex mypaper
 	pdflatex mypaper
 
-data.csv: code/make_data.py
+# would be nice to automate checking to see if data on web has changed
+web_data:
+	cd data; wget $(DATA_WEBSERVER)/$(INPUT_DATA)
+
+data.csv: code/make_data.py data/census.dat
 	cd code; python make_data.py
 
 results.Rda: data.csv model.R
@@ -879,7 +876,7 @@ Figs/fig1.pdf: R/fig1.R results.Rda
 Figs/fig2.pdf: R/fig2.R results.Rda
 	cd code; $(R) fig2.R fig2.Rout
 
-web: *.pdf *.tex *.R *.py
+web: *.pdf *.tex code/*.R code/*.py
 	zip analysis.zip code/*.{R,py} *.pdf *.tex
 	scp analysis.zip $(USER)@$(SERVER):$(WEBDIR)/.
 
@@ -889,7 +886,7 @@ clean:
 cleanall:
 	rm -f $(INTERIMS) $(DATA)
 
-.PHONY: web clean cleanall
+.PHONY: web clean cleanall web_data
 </pre>
 </div>
 </div>
@@ -925,7 +922,7 @@ cleanall:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
@@ -995,7 +992,7 @@ install: bin lib dir
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre>%%bash
